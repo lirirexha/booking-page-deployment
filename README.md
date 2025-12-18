@@ -36,6 +36,21 @@ A full-stack booking system built with **Next.js App Router**, **GraphQL**, **Pr
 
 ---
 
+## Deployment
+
+The application is deployed using **Vercel** for the frontend and API, with a managed **PostgreSQL** database.
+
+### Platform
+- **Frontend & API:** Vercel
+- **Database:** Neon
+
+
+**https://booking-page-deployment.vercel.app/book**
+
+**https://booking-page-deployment.vercel.app/admin/bookings**
+
+---
+
 ## Getting Started (Local)
 
 ### 1. Install dependencies
