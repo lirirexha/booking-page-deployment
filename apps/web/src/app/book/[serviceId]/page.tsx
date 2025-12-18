@@ -27,7 +27,9 @@ export default function ServiceBookingPage({
 
     const router = useRouter()
 
-    const [date, setDate] = useState(() => formatDateYYYYMMDD(new Date()))
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const [date, setDate] = useState(() => formatDateYYYYMMDD(tomorrow))
 
     const { data, loading, error } = useQuery(AVAILABLE_SLOTS, {
         variables: { serviceId, date },

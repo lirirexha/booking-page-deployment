@@ -1,6 +1,7 @@
 'use client'
 
 import { gql, useMutation, useQuery } from '@apollo/client'
+import { formatDateAndTime } from '../../../../quartz/formatDateAndTime'
 
 const BOOKINGS = gql`
   query Bookings {
@@ -36,6 +37,8 @@ export default function AdminBookingsPage() {
 
   const bookings = data?.bookings ?? []
 
+  console.log(bookings[0].startAt)
+
   return (
     <main style={{ padding: 24, maxWidth: 1000, margin: '0 auto' }}>
       <h1 style={{ fontSize: 28, fontWeight: 700 }}>Admin · Bookings</h1>
@@ -45,8 +48,8 @@ export default function AdminBookingsPage() {
           <div style={{ opacity: 0.8 }}>No bookings yet.</div>
         ) : (
           bookings.map((b: any) => {
-            const start = new Date(b.startAt)
-            const end = new Date(b.endAt)
+            const start = formatDateAndTime(b.startAt)
+            const end = formatDateAndTime(b.endAt)
 
             return (
               <div
@@ -63,11 +66,11 @@ export default function AdminBookingsPage() {
               >
                 <div>
                   <div style={{ fontWeight: 700 }}>
-                    {b.service.name} · {start.toLocaleString()} –{' '}
-                    {end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    {b.service.name}: {start.day}, {start.time} - {' '}
+                    {end.time}
                   </div>
                   <div style={{ opacity: 0.8, marginTop: 4 }}>
-                    {b.customerName} · {b.customerEmail} · <strong>{b.status}</strong>
+                    {b.customerName}, {b.customerEmail}, <strong>{b.status}</strong>
                   </div>
                 </div>
 

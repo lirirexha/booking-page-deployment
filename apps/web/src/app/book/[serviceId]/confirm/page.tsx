@@ -3,6 +3,7 @@
 import { gql, useMutation } from '@apollo/client'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState, use, useMemo } from 'react'
+import { formatDateAndTime } from '../../../../../quartz/formatDateAndTime'
 import styles from './page.module.css'
 
 const CREATE_BOOKING = gql`
@@ -38,7 +39,8 @@ export default function ConfirmBookingPage({
     if (!startAt) return null
     const d = new Date(startAt)
     if (Number.isNaN(d.getTime())) return null
-    return d.toLocaleString([], { weekday: 'short', year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })
+    const {day, time} = formatDateAndTime(d)
+    return `${day}, ${time}`
   }, [startAt])
 
   const [createBooking, { loading, error, data }] = useMutation(CREATE_BOOKING)
@@ -76,14 +78,16 @@ export default function ConfirmBookingPage({
 
   // Success view
   if (data?.createBooking?.id) {
+    const start = formatDateAndTime(data.createBooking.startAt)
+    const end = formatDateAndTime(data.createBooking.endAt)
     return (
       <main className={styles.main}>
         <p className={styles.heading}>Booking confirmed ✅</p>
         <p className={styles.dateAndTime}>
           <strong>{data.createBooking.service.name}</strong>
           <br />
-          {new Date(Number(data.createBooking.startAt)).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} -{' '}
-          {new Date(Number(data.createBooking.endAt)).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          {start.time} -{' '}
+          {end.time}
         </p>
 
         <button

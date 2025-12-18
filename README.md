@@ -49,9 +49,6 @@ docker compose up -d
 ### 3. Set environment variables
 Create a `.env.local` file inside `apps/web`:
 ```bash
-# Database
-DATABASE_URL="postgresql://booking:booking@localhost:5432/booking?schema=public"
-
 # Admin (demo-only)
 ADMIN_USER=admin
 ADMIN_PASS=48d63db34fa0
@@ -59,6 +56,12 @@ ADMIN_PASS=48d63db34fa0
 # Client-side (demo-only)
 NEXT_PUBLIC_ADMIN_USER=admin
 NEXT_PUBLIC_ADMIN_PASS=48d63db34fa0
+```
+
+Create a `.env` file inside `apps/web`:
+```bash
+# Database
+DATABASE_URL="postgresql://booking:booking@localhost:5432/booking?schema=public"
 ```
 
 ### 4. Run Prisma (from `apps/web`)
