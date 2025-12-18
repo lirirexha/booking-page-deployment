@@ -37,8 +37,6 @@ export default function AdminBookingsPage() {
 
   const bookings = data?.bookings ?? []
 
-  console.log(bookings[0].startAt)
-
   return (
     <main style={{ padding: 24, maxWidth: 1000, margin: '0 auto' }}>
       <h1 style={{ fontSize: 28, fontWeight: 700 }}>Admin · Bookings</h1>

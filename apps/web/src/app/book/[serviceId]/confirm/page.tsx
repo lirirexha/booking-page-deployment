@@ -4,6 +4,8 @@ import { gql, useMutation } from '@apollo/client'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState, use, useMemo } from 'react'
 import { formatDateAndTime } from '../../../../../quartz/formatDateAndTime'
+import { formatDateYYYYMMDD } from '../../../../../quartz/formatDateYYYYMMDD'
+import { AVAILABLE_SLOTS } from '../page'
 import styles from './page.module.css'
 
 const CREATE_BOOKING = gql`
@@ -43,7 +45,18 @@ export default function ConfirmBookingPage({
     return `${day}, ${time}`
   }, [startAt])
 
-  const [createBooking, { loading, error, data }] = useMutation(CREATE_BOOKING)
+  const [createBooking, { loading, error, data }] = useMutation(CREATE_BOOKING, {
+    refetchQueries: !!startAt ? [
+      {
+        query: AVAILABLE_SLOTS,
+        variables: {
+          serviceId,
+          date: formatDateYYYYMMDD(new Date(startAt ?? '')),
+        },
+      },
+    ] : [],
+  })
+
 
   if (!startAt || !startLabel) {
     return (

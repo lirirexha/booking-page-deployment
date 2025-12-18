@@ -3,20 +3,14 @@ import styles from './page.module.css'
 
 import { gql, useQuery } from '@apollo/client'
 import { useMemo, useState, use } from 'react'
+import { formatDateYYYYMMDD } from '../../../../quartz/formatDateYYYYMMDD'
 import { useRouter } from 'next/navigation'
 
-const AVAILABLE_SLOTS = gql`
+export const AVAILABLE_SLOTS = gql`
   query AvailableSlots($serviceId: ID!, $date: String!) {
     availableSlots(serviceId: $serviceId, date: $date)
   }
 `
-
-function formatDateYYYYMMDD(d: Date) {
-    const yyyy = d.getFullYear()
-    const mm = String(d.getMonth() + 1).padStart(2, '0')
-    const dd = String(d.getDate()).padStart(2, '0')
-    return `${yyyy}-${mm}-${dd}`
-}
 
 export default function ServiceBookingPage({
     params,

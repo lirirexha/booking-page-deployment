@@ -13,34 +13,35 @@ function overlaps(aStart: Date, aEnd: Date, bStart: Date, bEnd: Date) {
   return aStart < bEnd && aEnd > bStart
 }
 
+interface AvailabeleSlotsInput {
+  serviceId: string,
+  date: string
+}
+
 export const bookingsResolvers = {
   Query: {
     availableSlots: async (
       _: unknown,
-      { serviceId, date }: { serviceId: string; date: string }
+      { serviceId, date }: AvailabeleSlotsInput
     ) => {
-      // 1) fetch service once
       const service = await prisma.service.findUnique({ where: { id: serviceId } })
       if (!service || !service.isActive) throw new Error('Invalid service')
 
-      // booking windows for the day (business hours)
       const dayStart = toLocalDateTime(date, OPEN_HOUR, 0)
       const dayEnd = toLocalDateTime(date, CLOSE_HOUR, 0)
 
       const durationMs = service.durationM * 60 * 1000
       const stepMs = SLOT_STEP_MIN * 60 * 1000
 
-      // if service doesn't fit into the working day, return none
       if (dayStart.getTime() + durationMs > dayEnd.getTime()) return []
 
-      // 2) fetch all bookings for that day in ONE query
       const bookings = await prisma.booking.findMany({
         where: {
           serviceId,
           status: 'CONFIRMED',
           AND: [
-            { startAt: { lt: dayEnd } },  // booking starts before closing
-            { endAt: { gt: dayStart } },  // booking ends after opening
+            { startAt: { lt: dayEnd } },
+            { endAt: { gt: dayStart } },
           ],
         },
         select: { startAt: true, endAt: true },
