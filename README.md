@@ -92,7 +92,7 @@ npx prisma db seed
 ```bash
 yarn dev
 ```
-
+*initial repo:* https://github.com/lirirexha/booking-page
 ________________________
 
 # Local URLs
