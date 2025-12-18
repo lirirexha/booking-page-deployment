@@ -31,6 +31,9 @@ A full-stack booking system built with **Next.js App Router**, **GraphQL**, **Pr
 - PostgreSQL
 - Docker (local development)
 
+### Testing
+- **Jest** for unit testing (run `yarn test` from apps/web)
+
 ---
 
 ## Getting Started (Local)

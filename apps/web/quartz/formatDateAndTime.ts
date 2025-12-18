@@ -1,10 +1,12 @@
-export const formatDateAndTime = (dateP: Date | string | number) => {
-    let date = dateP as Date
-    if (!(dateP instanceof Date))
-        date = new Date(Number(dateP))
+import dayjs from "dayjs"
+import utc from 'dayjs/plugin/utc'
 
-    const day = date.toDateString()
-    const time = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+export const formatDateAndTime = (dateP: Date | string | number) => {
+    dayjs.extend(utc)
+    const date = dayjs.utc(dateP)
+
+    const day = date.format('ddd, MMM DD YYYY')
+    const time = date.format("hh:mm A")
 
     return {day, time}
 }
