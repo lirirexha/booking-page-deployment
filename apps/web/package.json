@@ -13,6 +13,7 @@
   "dependencies": {
     "@apollo/client": "^3",
     "@prisma/client": "^6",
+    "classnames": "^2.5.1",
     "dayjs": "^1.11.19",
     "graphql": "^16.12.0",
     "graphql-yoga": "^5.17.1",

@@ -2,6 +2,8 @@
 
 import { gql, useMutation, useQuery } from '@apollo/client'
 import { formatDateAndTime } from '../../../../quartz/formatDateAndTime'
+import styles from './page.module.css'
+import classNames from 'classnames'
 
 const BOOKINGS = gql`
   query Bookings {
@@ -38,12 +40,12 @@ export default function AdminBookingsPage() {
   const bookings = data?.bookings ?? []
 
   return (
-    <main style={{ padding: 24, maxWidth: 1000, margin: '0 auto' }}>
-      <h1 style={{ fontSize: 28, fontWeight: 700 }}>Admin · Bookings</h1>
+    <main className={styles.main}>
+      <p className={styles.heading}>Admin | Bookings</p>
 
-      <div style={{ marginTop: 16, display: 'grid', gap: 10 }}>
+      <div className={styles.bookings}>
         {bookings.length === 0 ? (
-          <div style={{ opacity: 0.8 }}>No bookings yet.</div>
+          <div>No bookings yet.</div>
         ) : (
           bookings.map((b: any) => {
             const start = formatDateAndTime(b.startAt)
@@ -52,38 +54,26 @@ export default function AdminBookingsPage() {
             return (
               <div
                 key={b.id}
-                style={{
-                  border: '1px solid #e5e5e5',
-                  borderRadius: 12,
-                  padding: 14,
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  gap: 12,
-                  alignItems: 'center',
-                }}
+                className={styles.bookItem}
               >
                 <div>
                   <div style={{ fontWeight: 700 }}>
                     {b.service.name}: {start.day}, {start.time} - {' '}
                     {end.time}
                   </div>
-                  <div style={{ opacity: 0.8, marginTop: 4 }}>
-                    {b.customerName}, {b.customerEmail}, <strong>{b.status}</strong>
+                  <div className={styles.clientName}>
+                    {b.customerName}, {b.customerEmail} | {b.status}
                   </div>
                 </div>
 
                 <button
+                  className={classNames(styles.appointmentBtn, {
+                    [styles.confirmed]: b.status === 'CONFIRMED'
+                  })}
                   disabled={cancelling || b.status !== 'CONFIRMED'}
                   onClick={async () => {
                     await cancelBooking({ variables: { id: b.id } })
                     await refetch()
-                  }}
-                  style={{
-                    padding: '10px 12px',
-                    borderRadius: 12,
-                    border: '1px solid #e5e5e5',
-                    background: b.status === 'CONFIRMED' ? 'white' : '#f5f5f5',
-                    cursor: b.status === 'CONFIRMED' ? 'pointer' : 'not-allowed',
                   }}
                 >
                   Cancel
